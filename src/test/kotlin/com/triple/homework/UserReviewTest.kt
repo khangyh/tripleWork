@@ -30,13 +30,13 @@ class UserReviewTest {
         val requestDto = UserReviewDTO(
             seq = null,
             type = "REVIEW",
-            action = "DELETE",  // ADD(등록) , MOD(수정) , DELETE(삭제)
+            action = "MOD",  // ADD(등록) , MOD(수정) , DELETE(삭제)
             reviewId = "240a0658-dc5f-4878-9381-ebb7b2667772",
             content = "좋아요!",
-            attachedPhotoIds = "[\"e4d1a64e-a531-46de-88d0-ff0ed70c0bb8\", \"afb0cef2-851d-4a50-bb07-9cc15cbdc332\"]",
-//            attachedPhotoIds = "",
-            userId = "3ede0ef2-92b7-4817-a5f3-0c575361f745",
-            placeId = "2e4baf1c-5acb-4efb-a1af-eddada31b0f"
+//            attachedPhotoIds = "[\"e4d1a64e-a531-46de-88d0-ff0ed70c0bb8\", \"afb0cef2-851d-4a50-bb07-9cc15cbdc332\"]",
+            attachedPhotoIds = "",
+            userId = "3ede0ef2-92b7-4817-a5f3-0c575361f746",
+            placeId = "2e4baf1c-5acb-4efb-a1af-eddada31b4f"
         )
 
         mockMvc.perform(

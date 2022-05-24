@@ -61,10 +61,10 @@ class UserReviewService {
     @Transactional
     fun setUserReviewPoint(userReviewDTO: UserReviewDTO): UserReviewPointEntity {
 
-        var totalPoint: Long = 0;
-        var photoPoint: Long = 0;
-        var contentPoint: Long = 0;
-        var placePoint: Long = 0;
+        var totalPoint: Long = 0
+        var photoPoint: Long = 0
+        var contentPoint: Long = 0
+        var placePoint: Long = 0
 
         var userReviewPointInfo = userReviewPointRepository
             .findTop1ByUserIdOrderByRegisterDateDesc(userReviewDTO.userId)
@@ -78,18 +78,55 @@ class UserReviewService {
 
         log.info { "> photoPoint " + photoPoint }
         log.info { "> contentPoint " + contentPoint }
+        log.info { "> totalPoint " + totalPoint }
+        log.info { "> placePoint " + placePoint }
 
-        log.info { "> pointCount " + totalPoint }
+        // 등록자 이외 지역 리뷰 조회
+        var otherUserReview = userReviewPointRepository
+            .findByPlaceIdAndPlacePointNot(userReviewDTO.placeId, 0)
 
-        //첨부 이미지 가산점 적용
-        if (userReviewDTO.attachedPhotoIds.isNotEmpty()) {
-            var attachedImages = JsonParser.parseString(userReviewDTO.attachedPhotoIds) as JsonArray
-            log.info("> attachedImages " + attachedImages.size() + " | " + attachedImages[1])
-            //첨부 이미지가 1개 이상일 시 포인트 처리
-            if (attachedImages.size() > 0) {
-                if (photoPoint <= 0) { // 기존 추가 점수가 없을 경우에만 점수 증가
-                    photoPoint++
-                    totalPoint++
+        // 포인 증감 처리
+        var point = PointTest(totalPoint, photoPoint, contentPoint, placePoint, userReviewDTO, otherUserReview)
+        point.procPoint()
+
+        log.info(">> point " + point.toString())
+
+        var userReviewPoint = UserReviewPointEntity()
+        userReviewPoint.userId = userReviewDTO.userId
+        userReviewPoint.placeId = userReviewDTO.placeId
+        userReviewPoint.point = point.component1()
+        userReviewPoint.photoPoint = point.component2()
+        userReviewPoint.contentPoint = point.component3()
+        userReviewPoint.placePoint = point.component4()
+
+        return userReviewPointRepository.save(userReviewPoint)
+    }
+
+    //사용자 리뷰 포인트 증감 data class
+    data class PointTest(
+        var totalPoint: Long = 0,
+        var photoPoint: Long = 0,
+        var contentPoint: Long = 0,
+        var placePoint: Long = 0,
+        var userReviewDTO: UserReviewDTO,
+        var otherUserReview: List<UserReviewPointEntity>
+    ) {
+        fun procPoint() {
+            //첨부 이미지 가산점 적용
+            if (userReviewDTO.attachedPhotoIds.isNotEmpty()) {
+                var attachedImages = JsonParser.parseString(userReviewDTO.attachedPhotoIds) as JsonArray
+                log.info("> attachedImages " + attachedImages.size() + " | " + attachedImages[1])
+                //첨부 이미지가 1개 이상일 시 포인트 처리
+                if (attachedImages.size() > 0) {
+                    if (photoPoint <= 0) { // 기존 추가 점수가 없을 경우에만 점수 증가
+                        photoPoint++
+                        totalPoint++
+                    }
+                } else {
+                    if (photoPoint > 0) {  // 기존 건의 이미지 추가 포인트가 있을 경우 차감
+                        photoPoint--
+                        totalPoint--
+                    }
                 }
             } else {
                 if (photoPoint > 0) {  // 기존 건의 이미지 추가 포인트가 있을 경우 차감
@@ -97,48 +134,30 @@ class UserReviewService {
                     totalPoint--
                 }
             }
-        } else {
-            if (photoPoint > 0) {  // 기존 건의 이미지 추가 포인트가 있을 경우 차감
-                photoPoint--
-                totalPoint--
+
+            //리뷰 내용(Content)이 있을 경우 포인트 처리
+            if (userReviewDTO.content.length > 0) {
+                if (contentPoint <= 0) { // 기존 추가 점수가 없을 경우에만 점수 증가
+                    contentPoint++
+                    totalPoint++
+                }
+            } else {
+                if (contentPoint > 0) { // 기존 건의 리뷰 내용 추가 포인트가 있을 경우 차감
+                    contentPoint--
+                    totalPoint--
+                }
+            }
+
+            //등록자 이외 등록된 지역 리뷰가 없을 경우 가산점 적용
+            if (otherUserReview.size <= 0) {
+                if (totalPoint > 0) {
+                    placePoint++
+                    totalPoint++
+                }
             }
         }
-
-        //리뷰 내용(Content)이 있을 경우 포인트 처리
-        if (userReviewDTO.content.length > 0) {
-            if (contentPoint <= 0) { // 기존 추가 점수가 없을 경우에만 점수 증가
-                contentPoint++
-                totalPoint++
-            }
-        } else {
-            if (contentPoint > 0) { // 기존 건의 리뷰 내용 추가 포인트가 있을 경우 차감
-                contentPoint--
-                totalPoint--
-            }
-        }
-
-        // 등록자 이외 지역 리뷰 조회
-        var otherUserReview = userReviewPointRepository
-            .findByPlaceIdAndPlacePointNot(userReviewDTO.placeId, 0)
-
-        //등록자 이외 등록된 지역 리뷰가 없을 경우 가산점 적용
-        if (otherUserReview.size <= 0) {
-            if (totalPoint > 0) {
-                placePoint++
-                totalPoint++
-            }
-        }
-
-        var userReviewPoint = UserReviewPointEntity()
-        userReviewPoint.userId = userReviewDTO.userId
-        userReviewPoint.placeId = userReviewDTO.placeId
-        userReviewPoint.point = totalPoint
-        userReviewPoint.photoPoint = photoPoint
-        userReviewPoint.contentPoint = contentPoint
-        userReviewPoint.placePoint = placePoint
-
-        return userReviewPointRepository.save(userReviewPoint)
     }
+
 
     //리뷰 삭제
     @Transactional

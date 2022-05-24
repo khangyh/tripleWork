@@ -1,7 +1,7 @@
 # 트리플 과제 HomeWork9 프로젝트
 
 + ###프로젝트 파일 설명
-  + ModelMapperConfig.kt (JPA Entity <-> DTO 변할을 위한 Mapper Configration)
+  + ModelMapperConfig.kt (JPA Entity <-> DTO Mapper Configration)
   + ResponseDTO.kt (요청 응답에 대한 Response 공통 결과 설정 DTO)
   + UserReviewController.kt (Controller)
   + UserReviewEntity.kt (리뷰 Entity)
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `USER_REVIEW_POINT` (
 + UserReviewTest 파일에 있는 setUserReviewJson 함수로 파라메터를 변경하여 등록,
 수정, 삭제 가능합니다. setUserReview 함수를 사용하여 개인 포인트 정보를 조회 가능합니다.
 + 데이터베이스 테이블 스키마 정보는 schema.sql 작성되어있으며 mysql을 사용하였습니다. 
-Spring Boot 스키마 자동 생성은 비황성화 되어 있기 때분에 생성이 필요 하며 개인 서버의 
-데이터베이스를 사용 가능하기 때문에 그대로 테스트 하셔도 무관합니다.
+Spring Boot 스키마 자동 생성은 비황성화 되어 있기 때분에 생성이 필요 하며 설정 되어 있는 개인 서버의
+설정으로 사용 가능하기 때문에 수정 없이 Mock 테스트 가능 합니다.
 
 
