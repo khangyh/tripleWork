@@ -25,7 +25,7 @@ class UserReviewTest {
     private lateinit var gson: Gson
 
     @Test
-    fun setUserReviewJson() {
+    fun setUserReview() {
         val uri: String = "/api/v1/addReview"
         val requestDto = UserReviewDTO(
             seq = null,
@@ -51,7 +51,7 @@ class UserReviewTest {
 
     // 사용자 리뷰 포인트 조회 (사용자 최종 포인트 )
     @Test
-    fun setUserReview(){
+    fun getUserReviewPoint(){
         val uri: String = "/api/v1/getUserReviewPoint"
         val queryParams = LinkedMultiValueMap<String,String>()
         queryParams.add("userId","3ede0ef2-92b7-4817-a5f3-0c575361f745")
@@ -61,12 +61,12 @@ class UserReviewTest {
             .andDo(MockMvcResultHandlers.print())
     }
 
-    // 사용자 리뷰 포인트 조회 (사용자 최종 포인트 )
+    //리뷰 및 포인트 전체 내역 조회
     @Test
     fun setReview(){
         val uri: String = "/api/v1/getReview"
         val queryParams = LinkedMultiValueMap<String,String>()
-        queryParams.add("type","review")
+        queryParams.add("type","review") // type : review , point
 
         mockMvc.perform(MockMvcRequestBuilders.get(uri).queryParams(queryParams))
             .andExpect(MockMvcResultMatchers.status().isOk)
