@@ -1,6 +1,6 @@
 # 트리플 과제 HomeWork9 프로젝트
 
-+ ###프로젝트 파일 설명
++ 프로젝트 파일 설명
   + ModelMapperConfig.kt (JPA Entity <-> DTO Mapper Configration)
   + ResponseDTO.kt (요청 응답에 대한 Response 공통 결과 설정 DTO)
   + UserReviewController.kt (Controller)
@@ -15,7 +15,7 @@
   + **schema.sql (DataBase Schema)**
   + **UserReviewTest.kt (TestMock 여기서 테스트 하시면 됩니다.)**
 
-###Table Schema Info
+Table Schema Info
 
 ````
 #사용자 리뷰 Table
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `USER_REVIEW_POINT` (
 > + getUserReviewPoint (사용자 포인트 조회)
 > + http://localhost:8080/review (API 결과 조회 페이지 Spring Boot 서버 실행 필요)
 
-#테스트 기회를 주셔서 감사합니다.
+테스트 기회를 주셔서 감사합니다.
 + 처음으로 사용해보는 Kotlin이라 문법이 부족한 부분이 있을 수 있습니다.
 + UserReviewTest 파일에 있는 setUserReview 함수로 파라메터를 변경하여 등록,
 수정, 삭제 가능합니다. getUserReviewPoint 함수를 사용하여 개인 포인트 정보를 조회 가능합니다.
