@@ -69,11 +69,15 @@ class UserReviewService {
         var userReviewPointInfo = userReviewPointRepository
             .findTop1ByUserIdOrderByRegisterDateDesc(userReviewDTO.userId)
 
-        if (userReviewPointInfo.size > 0) {
-            totalPoint = userReviewPointInfo[0].point ?: 0 // 사용자 포인트 합
+        var userReviewPointInfoTemp:List<UserReviewPointEntity>
+
+        if (userReviewDTO.action == "MOD" && userReviewPointInfo.size > 0) {
             photoPoint = userReviewPointInfo[0].photoPoint ?: 0
             contentPoint = userReviewPointInfo[0].contentPoint ?: 0
             placePoint = userReviewPointInfo[0].placePoint ?: 0
+        }else if (userReviewDTO.action == "ADD" && userReviewPointInfo.size > 0) {
+            //등록된 리뷰가 없는 첫 리뷰 작성자 일 경우 처리
+            totalPoint = userReviewPointInfo[0].point ?: 0 // 사용자 포인트 합
         }
 
         log.info { "> photoPoint " + photoPoint }
@@ -118,7 +122,10 @@ class UserReviewService {
                 log.info("> attachedImages " + attachedImages.size() + " | " + attachedImages[1])
                 //첨부 이미지가 1개 이상일 시 포인트 처리
                 if (attachedImages.size() > 0) {
-                    if (photoPoint <= 0) { // 기존 추가 점수가 없을 경우에만 점수 증가
+                    if (userReviewDTO.action == "MOD" && photoPoint <= 0) { // 기존 추가 점수가 없을 경우에만 점수 증가
+                        photoPoint++
+                        totalPoint++
+                    }else if(userReviewDTO.action == "ADD"){
                         photoPoint++
                         totalPoint++
                     }
@@ -137,7 +144,10 @@ class UserReviewService {
 
             //리뷰 내용(Content)이 있을 경우 포인트 처리
             if (userReviewDTO.content.length > 0) {
-                if (contentPoint <= 0) { // 기존 추가 점수가 없을 경우에만 점수 증가
+                if (userReviewDTO.action == "MOD" && contentPoint <= 0) { // 기존 추가 점수가 없을 경우에만 점수 증가
+                    contentPoint++
+                    totalPoint++
+                }else if(userReviewDTO.action == "ADD"){
                     contentPoint++
                     totalPoint++
                 }
@@ -151,7 +161,7 @@ class UserReviewService {
             //등록자 이외 등록된 지역 리뷰가 없을 경우 가산점 적용
             if (otherUserReview.size <= 0) {
                 if (totalPoint > 0) {
-                    placePoint++
+                    placePoint = 1
                     totalPoint++
                 }
             }
