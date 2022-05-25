@@ -9,5 +9,6 @@ interface UserReviewPointRepository : JpaRepository<UserReviewPointEntity, Long>
     fun findTop1ByUserIdAndPlaceIdOrderByRegisterDateDesc(userId: String, placeId: String): List<UserReviewPointEntity>
     fun findTop1ByUserIdOrderByRegisterDateDesc(userId: String): List<UserReviewPointEntity>
     fun findBySeq(seq: Long): UserReviewPointEntity
+    fun findTop50By(): List<UserReviewPointEntity>
 
 }

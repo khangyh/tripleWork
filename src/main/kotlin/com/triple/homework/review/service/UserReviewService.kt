@@ -199,4 +199,12 @@ class UserReviewService {
         return userReviewPointRepository.findTop1ByUserIdOrderByRegisterDateDesc(userId)
     }
 
+    fun getReview(type: String): Any {
+        return if ("point" == type)
+            userReviewPointRepository.findTop50By().sortedBy {it.seq  }.reversed()
+        else
+            userRepository.findTop50By().sortedBy {it.seq  }.reversed()
+
+    }
+
 }

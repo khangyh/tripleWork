@@ -60,4 +60,16 @@ class UserReviewTest {
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andDo(MockMvcResultHandlers.print())
     }
+
+    // 사용자 리뷰 포인트 조회 (사용자 최종 포인트 )
+    @Test
+    fun setReview(){
+        val uri: String = "/api/v1/getReview"
+        val queryParams = LinkedMultiValueMap<String,String>()
+        queryParams.add("type","review")
+
+        mockMvc.perform(MockMvcRequestBuilders.get(uri).queryParams(queryParams))
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andDo(MockMvcResultHandlers.print())
+    }
 }

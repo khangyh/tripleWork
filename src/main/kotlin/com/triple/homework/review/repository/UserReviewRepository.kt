@@ -1,6 +1,7 @@
 package com.triple.homework.review.repository
 
 import com.triple.homework.review.entity.UserReviewEntity
+import com.triple.homework.review.entity.UserReviewPointEntity
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface UserReviewRepository : JpaRepository<UserReviewEntity, Long> {
@@ -8,4 +9,5 @@ interface UserReviewRepository : JpaRepository<UserReviewEntity, Long> {
     fun findTop1ByUserIdAndPlaceId(userId: String, placeId: String): List<UserReviewEntity>
     fun findBySeq(seq: Long): UserReviewEntity
     fun findAllBy(): List<UserReviewEntity>
+    fun findTop50By(): List<UserReviewEntity>
 }

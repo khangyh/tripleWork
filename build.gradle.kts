@@ -50,7 +50,8 @@ dependencies {
     implementation("org.modelmapper:modelmapper:2.4.5") //DTO Mapper
     implementation("com.google.code.gson:gson:2.8.9")
 
-
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 //    implementation("org.glassfish:jakarta.el:3.0.3")
 }
 

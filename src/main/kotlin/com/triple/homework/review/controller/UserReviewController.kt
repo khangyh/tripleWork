@@ -1,6 +1,7 @@
 package com.triple.homework.review.controller
 
 import com.triple.homework.common.model.ResponseDTO
+import com.triple.homework.review.entity.UserReviewEntity
 import com.triple.homework.review.entity.UserReviewPointEntity
 import com.triple.homework.review.model.UserReviewDTO
 import com.triple.homework.review.service.UserReviewService
@@ -75,6 +76,20 @@ class UserReviewController {
             responseDTO.resultMessage = "등록된 리뷰가 없습니다."
         } else {
             responseDTO.resultBody = modelMapper.map(result?.get(0), UserReviewPointEntity::class.java)
+        }
+
+        return ResponseEntity.ok().body(responseDTO)
+    }
+
+    @GetMapping("/getReview")
+    fun getReview(type: String): ResponseEntity<ResponseDTO> {
+        var responseDTO = ResponseDTO()
+
+        if (type.isEmpty()) {
+            responseDTO.resultCode = "FAIL"
+            responseDTO.resultMessage = "요청 Type을 입력해 주세요."
+        } else {
+            responseDTO.resultBody = tourService.getReview(type)
         }
 
         return ResponseEntity.ok().body(responseDTO)
