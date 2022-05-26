@@ -1,4 +1,4 @@
-# 트리플 과제 HomeWork9 프로젝트
+# Kotlin + Spring Boot + Spring Data JPA (RestFul Server)
 
 + 프로젝트 파일 설명
   + ModelMapperConfig.kt (JPA Entity <-> DTO Mapper Configration)
