@@ -1,4 +1,4 @@
-# Kotlin + Spring Boot + Spring Data JPA (RestFul Server)
+# Kotlin + Spring Boot + Spring Data JPA (RestFul API)
 
 + 프로젝트 파일 설명
   + ModelMapperConfig.kt (JPA Entity <-> DTO Mapper Configration)
