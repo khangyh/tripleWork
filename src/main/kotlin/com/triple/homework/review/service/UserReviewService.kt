@@ -33,7 +33,7 @@ class UserReviewService {
     fun setReview(userReviewDTO: UserReviewDTO): UserReviewDTO {
 
         //리뷰 등록
-        var result = userRepository.save(modelMapper.map(userReviewDTO, UserReviewEntity::class.java))
+        userRepository.save(modelMapper.map(userReviewDTO, UserReviewEntity::class.java))
 
         //리뷰 포인트 등록
         setUserReviewPoint(userReviewDTO)
@@ -46,7 +46,7 @@ class UserReviewService {
     fun setReviewUpdate(userReviewDTO: UserReviewDTO): UserReviewDTO {
 
         //리뷰 수정
-        var userReview = userRepository.findByUserIdAndPlaceId(userReviewDTO.userId, userReviewDTO.placeId)
+        val userReview = userRepository.findByUserIdAndPlaceId(userReviewDTO.userId, userReviewDTO.placeId)
         userReview.content = userReviewDTO.content
         userReview.attachedPhotoIds = userReviewDTO.attachedPhotoIds
         userReview.updateDate = LocalDateTime.now()
@@ -66,17 +66,15 @@ class UserReviewService {
         var contentPoint: Long = 0
         var placePoint: Long = 0
 
-        var userReviewPointInfo = userReviewPointRepository
+        val userReviewPointInfo = userReviewPointRepository
             .findTop1ByUserIdOrderByRegisterDateDesc(userReviewDTO.userId)
-
-        var userReviewPointInfoTemp:List<UserReviewPointEntity>
 
         if (userReviewDTO.action == "MOD" && userReviewPointInfo.size > 0) {
             photoPoint = userReviewPointInfo[0].photoPoint ?: 0
             contentPoint = userReviewPointInfo[0].contentPoint ?: 0
             placePoint = userReviewPointInfo[0].placePoint ?: 0
         }else if (userReviewDTO.action == "ADD" && userReviewPointInfo.size > 0) {
-            //등록된 리뷰가 없는 첫 리뷰 작성자 일 경우 처리
+            //1건 이상 리뷰 등록한 사용자의 경우 총 리뷰 포인트를 셋팅
             totalPoint = userReviewPointInfo[0].point ?: 0 // 사용자 포인트 합
         }
 
@@ -86,16 +84,16 @@ class UserReviewService {
         log.info { "> placePoint " + placePoint }
 
         // 등록자 이외 지역 리뷰 조회
-        var otherUserReview = userReviewPointRepository
+        val otherUserReview = userReviewPointRepository
             .findByPlaceIdAndPlacePointNot(userReviewDTO.placeId, 0)
 
         // 포인 증감 처리
-        var point = PointTest(totalPoint, photoPoint, contentPoint, placePoint, userReviewDTO, otherUserReview)
+        val point = PointTest(totalPoint, photoPoint, contentPoint, placePoint, userReviewDTO, otherUserReview)
         point.procPoint()
 
         log.info(">> point " + point.toString())
 
-        var userReviewPoint = UserReviewPointEntity()
+        val userReviewPoint = UserReviewPointEntity()
         userReviewPoint.userId = userReviewDTO.userId
         userReviewPoint.placeId = userReviewDTO.placeId
         userReviewPoint.point = point.component1()
@@ -118,7 +116,7 @@ class UserReviewService {
         fun procPoint() {
             //첨부 이미지 가산점 적용
             if (userReviewDTO.attachedPhotoIds.isNotEmpty()) {
-                var attachedImages = JsonParser.parseString(userReviewDTO.attachedPhotoIds) as JsonArray
+                val attachedImages = JsonParser.parseString(userReviewDTO.attachedPhotoIds) as JsonArray
                 log.info("> attachedImages " + attachedImages.size() + " | " + attachedImages[1])
                 //첨부 이미지가 1개 이상일 시 포인트 처리
                 if (attachedImages.size() > 0) {
@@ -173,21 +171,21 @@ class UserReviewService {
     @Transactional
     fun setDeleteReview(userReviewDTO: UserReviewDTO): UserReviewDTO {
         //사용자 리뷰 삭제
-        var userReview = userRepository.findByUserIdAndPlaceId(userReviewDTO.userId, userReviewDTO.placeId)
+        val userReview = userRepository.findByUserIdAndPlaceId(userReviewDTO.userId, userReviewDTO.placeId)
         userRepository.delete(userReview)
 
-        var userReviewPointInfo = userReviewPointRepository
+        val userReviewPointInfo = userReviewPointRepository
             .findTop1ByUserIdOrderByRegisterDateDesc(userReviewDTO.userId)
 
-        var totalPoint = userReviewPointInfo[0].point ?: 0
-        var photoPoint = userReviewPointInfo[0].photoPoint ?: 0
-        var contentPoint = userReviewPointInfo[0].contentPoint ?: 0
-        var placePoint = userReviewPointInfo[0].placePoint ?: 0
+        val totalPoint = userReviewPointInfo[0].point ?: 0
+        val photoPoint = userReviewPointInfo[0].photoPoint ?: 0
+        val contentPoint = userReviewPointInfo[0].contentPoint ?: 0
+        val placePoint = userReviewPointInfo[0].placePoint ?: 0
 
-        var point = totalPoint - (photoPoint + contentPoint + placePoint)
+        val point = totalPoint - (photoPoint + contentPoint + placePoint)
 
         //사용자 지역 사진 내용 추가 점수 0 초기화 및 포인트 차감
-        var userReviewPoint = UserReviewPointEntity()
+        val userReviewPoint = UserReviewPointEntity()
         userReviewPoint.userId = userReviewDTO.userId
         userReviewPoint.placeId = userReviewDTO.placeId
         userReviewPoint.point = point
