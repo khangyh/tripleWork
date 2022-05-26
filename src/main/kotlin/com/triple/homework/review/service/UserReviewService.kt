@@ -70,6 +70,7 @@ class UserReviewService {
             .findTop1ByUserIdOrderByRegisterDateDesc(userReviewDTO.userId)
 
         if (userReviewDTO.action == "MOD" && userReviewPointInfo.size > 0) {
+            totalPoint = userReviewPointInfo[0].point ?: 0 // 사용자 포인트 합
             photoPoint = userReviewPointInfo[0].photoPoint ?: 0
             contentPoint = userReviewPointInfo[0].contentPoint ?: 0
             placePoint = userReviewPointInfo[0].placePoint ?: 0
