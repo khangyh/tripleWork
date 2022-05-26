@@ -45,14 +45,13 @@ CREATE TABLE IF NOT EXISTS `USER_REVIEW_POINT` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ````
 
->테스트 방법
 > + UserReviewTest (Mock Test)
 > + setUserReview (리뷰 등록, 수정, 삭제)
 > + getUserReviewPoint (사용자 포인트 조회)
 > + http://localhost:8080/review (API 결과 조회 페이지 Spring Boot 서버 실행 필요)
 
-테스트 기회를 주셔서 감사합니다.
-+ 처음으로 사용해보는 Kotlin이라 문법이 부족한 부분이 있을 수 있습니다.
+
+
 + UserReviewTest 파일에 있는 setUserReview 함수로 파라메터를 변경하여 등록,
 수정, 삭제 가능합니다. getUserReviewPoint 함수를 사용하여 개인 포인트 정보를 조회 가능합니다.
 + 데이터베이스 테이블 스키마 정보는 schema.sql 작성되어있으며 mysql을 사용하였습니다. 
