@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `USER_REVIEW_POINT` (
 > + UserReviewTest (Mock Test)
 > + setUserReview (리뷰 등록, 수정, 삭제)
 > + getUserReviewPoint (사용자 포인트 조회)
-> + http://localhost:8080/review (API 결과 조회 페이지 Spring Boot 서버 실행 필요)
+> + http://localhost:8080/review
 
 
 
