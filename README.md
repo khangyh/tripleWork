@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `USER_REVIEW_POINT` (
 > + UserReviewTest (Mock Test)
 > + setUserReview (리뷰 등록, 수정, 삭제)
 > + getUserReviewPoint (사용자 포인트 조회)
-> + http://localhost:8080/review
+> + http://localhost:8080/review (등록 데이터 조회 화면)
 
 
 
