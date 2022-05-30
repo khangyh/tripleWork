@@ -1,7 +1,7 @@
 # Kotlin + Spring Boot + Spring Data JPA (RestFul API)
 
 + Kotlin 기반 Rest API 스터디를 위한 테스트 프로젝트 입니다.
-  + 기본 적인 CRUD API로 구성되어 있으며 차후 기능 기능 추가 예정입니다.
+  + 기본 적인 CRUD API로 구성되어 있으며 차후 기능 추가 예정입니다.
 
 
 + 프로젝트 파일 설명
